@@ -15,7 +15,7 @@ typedef pair<LL, LL> PLL;
 #define rep1(i, a, b) for(int i = a; i < b; i ++)
 #define per1(i, a, b) for(int i = a; i >= b; i --)
 #define IOS ios_base::sync_with_stdio(0); cin.tie(0)
-
-int main(){
-	
+const int MXN = (int)1e5 + 7;
+int main(void){
+	return 0;
 }
