@@ -1,7 +1,0 @@
-colo ron
-syn on
-se ai ar nu rnu 
-se mouse=a bs=2 ts=2 sw=2 ttm=100
-au BufNewFile *.cpp 0r ~/default.cpp | :1,$-7 fo
-filetype indent on
-
