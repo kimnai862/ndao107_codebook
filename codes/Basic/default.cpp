@@ -17,5 +17,5 @@ typedef pair<LL, LL> PLL;
 #define IOS ios_base::sync_with_stdio(0); cin.tie(0)
 const int MXN = (int)1e5 + 7;
 int main(void){
-	return 0;
+  return 0;
 }
