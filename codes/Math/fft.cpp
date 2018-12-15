@@ -48,7 +48,7 @@ void FFT(int a, int b, int l1, int l2, int c){
     fft(xt, len, 1);
 
     rep1(i, l2>>1, len) yt[i].a = yt[i].b = 0; 
-    rep(i, l1) (i&1 ? yt[i>>1].b : yt[i>>1].a) = st[b][i];
+    rep(i, l2) (i&1 ? yt[i>>1].b : yt[i>>1].a) = st[b][i];
     fft(yt, len, 1);
 
 
