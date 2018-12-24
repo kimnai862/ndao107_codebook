@@ -1,63 +1,43 @@
-struct Node{
-	int pri,num,cnt,lc,rc;
-	Node () : pri(-1), num(0), cnt(0), lc(0), rc(0) {}
-	Node (int _num){
-		pri = (rand()<<15) + rand();
-		num = _num;
-		cnt = 1;
-		lc = rc = 0;
-	}
-}tree[MX];
+const int MEM = 360004;
+struct Treap {
+  static Treap mem[MEM], *pmem;
+  Treap *l, *r;
+  int val;
+  int size;
+	int pri;
+  Treap () : l(NULL), r(NULL), size(0) {}
+  Treap (int _val) : 
+    l(NULL), r(NULL), val(_val), size(1), pri(rand()){}
+} Treap::mem[MEM], *Treap::pmem = Treap::mem;
 
-int nMem;
-
-int get_rand(){
-	return (rand()<<15) + rand();
+int size(const Treap *t) {
+	return t ? t->size : 0; 
 }
-int get_node(){
-	tree[nMem] = Node();
-	if (nMem >= MX) while(1);
-	return nMem++;
+void pull(Treap *t) {
+  if (!t) return;
+  t->size = size(t->l) + size(t->r) + 1;
 }
-void upd_node(int rt){
-	if (!rt) return ;
-	int lc=tree[rt].lc;
-	int rc=tree[rt].rc;
-	tree[rt].cnt = tree[lc].cnt + tree[rc].cnt + 1;
+Treap *merge(Treap *a, Treap *b) {
+	if(!a || !b) return a ? a : b;
+  if(a->pri > b->pri){
+    a->r = merge(a->r, b);
+		pull(a);
+		return a;
+  } else{
+    b->l = merge(a, b->l);
+		pull(b);
+		return b;
+  }
 }
-int merge(int a, int b){
-	if (!a) return b;
-	if (!b) return a;
-	int res=0;
-	if (tree[a].pri > tree[b].pri){
-		res = a; //get_node();
-		tree[res] = tree[a];
-		tree[res].rc = merge(tree[res].rc,b);
-	} else {
-		res = b; //get_node();
-		tree[res] = tree[b];
-		tree[res].lc = merge(a,tree[res].lc);
-	}
-	upd_node(res);
-	return res;
-}
-pair<int,int> split(int a, int k){
-	if (k == 0) return {0,a};
-	if (k == tree[a].cnt) return {a,0};
-	int lc=tree[a].lc, rc=tree[a].rc;
-	pair<int,int> res;
-	int np=a; //get_node();
-	//tree[np] = tree[a];
-	if (tree[lc].cnt >= k){
-		res = split(lc,k);
-		tree[np].lc = res.S;
-		res.S = np;
-	} else {
-		res = split(rc,k-tree[lc].cnt-1);
-		tree[np].rc = res.F;
-		res.F = np;
-	}
-	upd_node(res.F);
-	upd_node(res.S);
-	return res;
+void split(Treap *t, int k, Treap *&a, Treap *&b) {
+  if(!t) a = b = NULL;
+  else if(t->val <= k){
+    a = t;
+    split(t->r, k, a->r, b);
+    pull(a);
+  } else{
+    b = t;
+    split(t->l, k, a, b->l);
+    pull(b);
+  }
 }
